@@ -1,14 +1,14 @@
 import React from "react";
 import PageTemplate from "../components/templateMovieListPage";
 import { useQuery } from "react-query";
-import { getTrendingMovies } from "../api/tmdb-api";
+import { getTrending} from "../api/tmdb-api";
 import Spinner from '../components/spinner';
-import PlaylistAdd from "../components/cardIcons/playlistAdd";
+import AddToWatchIcon from "../components/cardIcons/addToWatch";
 
 const TrendingMoviesPage = (props) => {
     const { data, error, isLoading, isError } = useQuery(
         "trending",
-        getTrendingMovies
+        getTrending
     );
 
     if (isLoading) {
@@ -27,7 +27,7 @@ const TrendingMoviesPage = (props) => {
             movies={trendingMovies} 
             action={(movie) => (
                 <>
-                    <PlaylistAdd movie={movie} />
+                    <AddToWatchIcon movie ={movie} />
                 </>
             )}
         />
