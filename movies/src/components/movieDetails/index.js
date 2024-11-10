@@ -10,20 +10,28 @@ import Typography from "@mui/material/Typography";
 import Drawer from "@mui/material/Drawer";
 import MovieReviews from "../movieReviews";
 import ActorCard from "../actorCard";
-
+import { useQuery } from "react-query"; // Import react-query
+import { getMovieCast } from "../../api/tmdb-api";
 
 const root = {
-    display: "flex",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    listStyle: "none",
-    padding: 1.5,
-    margin: 0,
+  display: "flex",
+  justifyContent: "center",
+  flexWrap: "wrap",
+  listStyle: "none",
+  padding: 1.5,
+  margin: 0,
 };
 const chip = { margin: 0.5 };
 
-const MovieDetails = ({ movie }) => {  // Don't miss this!
+const MovieDetails = ({ movie }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  // Fetch the cast data for this movie
+  const { data: castData, isLoading, isError } = useQuery(
+    ["movieCast",{id: movie.id}],
+    () => getMovieCast(movie.id)
+  );
+
 
   return (
     <>
@@ -35,46 +43,56 @@ const MovieDetails = ({ movie }) => {  // Don't miss this!
         {movie.overview}
       </Typography>
 
-      <Paper 
-        component="ul" 
-        sx={{...root}}
-      >
+      <Paper component="ul" sx={{ ...root }}>
         <li>
-          <Chip label="Genres" sx={{...chip}} color="primary" />
+          <Chip label="Genres" sx={{ ...chip }} color="primary" />
         </li>
         {movie.genres.map((g) => (
           <li key={g.name}>
-            <Chip label={g.name} sx={{...chip}} />
+            <Chip label={g.name} sx={{ ...chip }} />
           </li>
         ))}
       </Paper>
-      <Paper component="ul" sx={{...root}}>
+
+      <Paper component="ul" sx={{ ...root }}>
         <Chip icon={<AccessTimeIcon />} label={`${movie.runtime} min.`} />
-        <Chip
-          icon={<MonetizationIcon />}
-          label={`${movie.revenue.toLocaleString()}`}
-        />
-        <Chip
-          icon={<StarRate />}
-          label={`${movie.vote_average} (${movie.vote_count}`}
-        />
+        <Chip icon={<MonetizationIcon />} label={`${movie.revenue.toLocaleString()}`} />
+        <Chip icon={<StarRate />} label={`${movie.vote_average} (${movie.vote_count})`} />
         <Chip label={`Released: ${movie.release_date}`} />
       </Paper>
-      <Paper component="ul" sx={{...root}}>
+
+      <Paper component="ul" sx={{ ...root }}>
         <li>
-          <Chip label = "Production" sx={{...chip}} color = "primary"/>
+          <Chip label="Production" sx={{ ...chip }} color="primary" />
         </li>
-        {movie.production_countries.map((country) =>(
+        {movie.production_countries.map((country) => (
           <li key={country.name}>
-            <Chip label ={country.name} sx={{...chip}}/>
+            <Chip label={country.name} sx={{ ...chip }} />
           </li>
         ))}
-
       </Paper>
+
+      {/* Actor details section */}
+      <Typography variant="h5" component="h3" sx={{ marginTop: "1em" }}>
+        Cast
+      </Typography>
+
+      {isLoading ? (
+        <Typography>Loading Cast...</Typography>
+      ) : isError ? (
+        <Typography>Error fetching cast details.</Typography>
+      ) : (
+        <Paper component="ul" sx={{ ...root }}>
+          {castData.cast.slice(0, 10).map((actor) => ( // Display top 10 actors
+            <ActorCard key={actor.id} actor={actor} /> // Use ActorCard component for each actor
+          ))}
+        </Paper>
+      )}
+
       <Fab
         color="secondary"
         variant="extended"
-        onClick={() =>setDrawerOpen(true)}
+        onClick={() => setDrawerOpen(true)}
         sx={{
           position: 'fixed',
           bottom: '1em',
@@ -87,7 +105,8 @@ const MovieDetails = ({ movie }) => {  // Don't miss this!
       <Drawer anchor="top" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         <MovieReviews movie={movie} />
       </Drawer>
-      </>
+    </>
   );
 };
-export default MovieDetails ;
+
+export default MovieDetails;

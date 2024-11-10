@@ -3,10 +3,8 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
-import Grid from "@mui/material/Grid";
 
 const ActorDetails = ({ actor }) => {
-    // Handle case where actor data is not available
     if (!actor) {
         return (
             <Typography variant="h6" color="text.secondary" sx={{ mt: 3, textAlign: 'center' }}>

@@ -88,6 +88,7 @@ export const getMovie = (args) => {
   };
 
   export const getMovieCast = (args) => {
+    console.log("Query args:", args);
     const [, idPart] = args.queryKey;
     const { id } = idPart;
     return fetch(
