@@ -1,14 +1,29 @@
 import React from "react";
+import { useParams } from "react-router-dom"; // Import useParams
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
+import { useQuery } from "react-query";
+import { getActorDetails } from "../../api/tmdb-api"; // Import the API function
 
-const ActorDetails = ({ actor }) => {
-    if (!actor) {
+const ActorDetails = () => {
+    const { id } = useParams(); // Get actor ID from URL
+
+    // Fetch actor details
+    const { data: actor, isLoading, isError, error } = useQuery(
+        ["actorDetails", { id }],
+        () => getActorDetails({ queryKey: ["actorDetails", { id }] })
+    );
+
+    if (isLoading) {
+        return <Typography>Loading actor details...</Typography>;
+    }
+
+    if (isError) {
         return (
             <Typography variant="h6" color="text.secondary" sx={{ mt: 3, textAlign: 'center' }}>
-                Actor details not available.
+                Error loading actor details: {error.message}
             </Typography>
         );
     }
@@ -29,7 +44,7 @@ const ActorDetails = ({ actor }) => {
                     {actor.biography || "Biography not available."}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    Known For: {actor.known_for ? actor.known_for.map(film => film.title).join(', ') : "N/A"}
+                    Known For: {actor.known_for_department || "N/A"}
                 </Typography>
             </CardContent>
         </Card>
@@ -37,3 +52,4 @@ const ActorDetails = ({ actor }) => {
 };
 
 export default ActorDetails;
+

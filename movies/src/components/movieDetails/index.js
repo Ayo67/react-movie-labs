@@ -8,9 +8,10 @@ import NavigationIcon from "@mui/icons-material/Navigation";
 import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
 import Drawer from "@mui/material/Drawer";
+import Grid from "@mui/material/Grid";  // Import Grid component
 import MovieReviews from "../movieReviews";
 import ActorCard from "../actorCard";
-import { useQuery } from "react-query"; // Import react-query
+import { useQuery } from "react-query";
 import { getMovieCast } from "../../api/tmdb-api";
 
 const root = {
@@ -28,10 +29,9 @@ const MovieDetails = ({ movie }) => {
 
   // Fetch the cast data for this movie
   const { data: castData, isLoading, isError } = useQuery(
-    ["movieCast",{id: movie.id}],
-    () => getMovieCast(movie.id)
+    ["movieCast", { id: movie.id }],
+    getMovieCast
   );
-
 
   return (
     <>
@@ -82,11 +82,13 @@ const MovieDetails = ({ movie }) => {
       ) : isError ? (
         <Typography>Error fetching cast details.</Typography>
       ) : (
-        <Paper component="ul" sx={{ ...root }}>
-          {castData.cast.slice(0, 10).map((actor) => ( // Display top 10 actors
-            <ActorCard key={actor.id} actor={actor} /> // Use ActorCard component for each actor
+        <Grid container spacing={2} sx={{ padding: 2 }}>
+          {castData.cast.slice(0, 10).map((actor) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={actor.id}>  {/* Adjust sizes as needed */}
+              <ActorCard actor={actor} />
+            </Grid>
           ))}
-        </Paper>
+        </Grid>
       )}
 
       <Fab

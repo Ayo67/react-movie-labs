@@ -1,47 +1,46 @@
+// MoviePage.js
 import React from "react";
 import { useParams } from 'react-router-dom';
-import MovieDetails from "../components/movieDetails/";
+import MovieDetails from "../components/movieDetails";
 import PageTemplate from "../components/templateMoviePage";
 import { getMovie, getMovieCast } from "../api/tmdb-api";
 import { useQuery } from "react-query";
-import Spinner from '../components/spinner'
+import Spinner from '../components/spinner';
 
-const MoviePage = (props) => {
+const MoviePage = () => {
   const { id } = useParams();
-  const { data: movie, error, isLoading, isError } = useQuery(
-    ["movie", { id: id }],
+
+  // Fetch movie details
+  const { data: movie, error: movieError, isLoading: isMovieLoading, isError: isMovieError } = useQuery(
+    ["movie", { id }],
     getMovie
   );
 
-  const { data: castData, castError, isCastLoading, isCastError } = useQuery(
-    ["movieCast", { id }],
+  // Fetch cast details
+  const { data: cast, error: castError, isLoading: isCastLoading, isError: isCastError } = useQuery(
+    ["cast", { id }],
     getMovieCast
   );
 
-  if (isLoading || isCastLoading) {
+  if (isMovieLoading || isCastLoading) {
     return <Spinner />;
   }
 
-  if (isError) {
-    return <h1>{error.message}</h1>;
+  
+  if (isMovieError || isCastError) {
+    const errorMessage = isMovieError ? movieError.message : castError.message;
+    return <h1>Error fetching data: {errorMessage}</h1>;
   }
 
-  if (isCastError) {
-    return <h1>{castError.message}</h1>;
-  }
-
-  return (
-    <>
-      {movie ? (
-        <>
-          <PageTemplate movie={movie}>
-            <MovieDetails movie={movie} cast={castData} />
-          </PageTemplate>
-        </>
-      ) : (
-        <p>Waiting for movie details</p>
-      )}
-    </>
+  return movie ? (
+    <PageTemplate movie={movie}>
+      <MovieDetails 
+        movie={movie} 
+        cast={cast?.cast || []} 
+      />
+    </PageTemplate>
+  ) : (
+    <p>Waiting for movie details...</p>
   );
 };
 
