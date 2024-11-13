@@ -1,43 +1,39 @@
 import React from "react";
-// import { useParams } from 'react-router-dom';
-// import MovieDetails from "../components/movieDetails";
-import PageTemplate from "../components/templateMoviePage";
-import { getTopRatedMovies} from "../api/tmdb-api";
+import MovieListPageTemplate from "../components/templateMovieListPage"; // Import the card view template
+import { getTopRatedMovies } from "../api/tmdb-api";
 import { useQuery } from "react-query";
-import Spinner from '../components/spinner'
-import AddToFavoritesIcon from '../components/cardIcons/addToFavorites'
+import Spinner from '../components/spinner';
+import AddToFavoritesIcon from '../components/cardIcons/addToFavorites';
 
+const TopRatedMoviesPage = () => {
+  const { data, error, isLoading, isError } = useQuery(
+    "topRated",
+    getTopRatedMovies
+  );
 
+  if (isLoading) {
+    return <Spinner />;
+  }
 
-const TopRatedMoviesPage = (props) => {
+  if (isError) {
+    return <h1>{error.message}</h1>;
+  }
 
-    const { data, error, isLoading, isError }  = useQuery(
-        "topRated", 
-        getTopRatedMovies)
-  
-    if (isLoading) {
-      return <Spinner />
-    }
-  
-    if (isError) {
-      return <h1>{error.message}</h1>
-    } 
-    
-    const topRatedMovies = data.results;
+  const movies = data.results;
 
-    // Redundant, but necessary to avoid app crashing.
-  const favorites = topRatedMovies.filter(m => m.favorite)
+  // Redundant, but necessary to avoid app crashing.
+  const favorites = movies.filter(m => m.favorite)
   localStorage.setItem('favorites', JSON.stringify(favorites))
-  const addToFavorites = (movieId) => true 
 
   return (
-    <PageTemplate
+    <MovieListPageTemplate
       title="Top Rated Movies"
-      movies={topRatedMovies}
+      movies={movies}
       action={(movie) => {
         return <AddToFavoritesIcon movie={movie} />
       }}
     />
-);
+  );
 };
+
 export default TopRatedMoviesPage;
