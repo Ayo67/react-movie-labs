@@ -1,18 +1,22 @@
-export const getMovies = () => {
-  return fetch(
-    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&include_adult=false&include_video=false&page=1`
-  ).then((response) => {
-    if (!response.ok) {
-      return response.json().then((error) => {
-        throw new Error(error.status_message || "Something went wrong");
+export const getMovies = (offset = 0) => {
+  const itemsPerPage = 20;
+  const page = Math.floor(offset / itemsPerPage) + 1; 
+  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&include_adult=false&include_video=false&page=${page}`;
+  return fetch(url)
+      .then((response) => {
+          if (!response.ok) {
+              return response.json().then((error) => {
+                  throw new Error(error.status_message || "Something went wrong");
+              });
+          }
+          return response.json();
+      })
+      .catch((error) => {
+          console.error("Error fetching movies:", error);
+          throw error;
       });
-    }
-    return response.json();
-  })
-  .catch((error) => {
-      throw error
-  });
 };
+
   
 export const getMovie = (args) => {
   //console.log(args)
@@ -125,21 +129,26 @@ export const getMovie = (args) => {
   };
   
 
-  export const getUpcomingMovies = () => {
-    return fetch(
-      `https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&page=1`
-    ).then((response) => {
-      if (!response.ok) {
-        return response.json().then((error) => {
-          throw new Error(error.status_message || "Something went wrong");
+  export const getUpcomingMovies = (offset = 0) => {
+    const itemsPerPage = 20;
+    const page = Math.floor(offset / itemsPerPage) + 1; 
+    const url = `https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&page=${page}`;
+    return fetch(url)
+        .then((response) => {
+            if (!response.ok) {
+                return response.json().then((error) => {
+                    throw new Error(error.status_message || "Something went wrong");
+                });
+            }
+            return response.json();
+        })
+        .catch((error) => {
+            console.error("Error fetching upcoming movies:", error);
+            throw error;
         });
-      }
-      return response.json();
-    })
-    .catch((error) => {
-        throw error
-    });
-  };
+};
+
+
 
   export const getActorDetails = (args) => {
     const [, idPart] = args.queryKey;
@@ -159,35 +168,56 @@ export const getMovie = (args) => {
         });
 };
 
-export const getTopRatedMovies = () => {
-  return fetch(
-    `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&page=1`
-  ).then((response) => {
-    if (!response.ok) {
-      return response.json().then((error) => {
-        throw new Error(error.status_message || "Something went wrong");
+export const getTopRatedMovies = (offset = 0) => {
+  const itemsPerPage = 20; 
+  const page = Math.floor(offset / itemsPerPage) + 1; 
+  const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&page=${page}`;
+  return fetch(url)
+      .then((response) => {
+          if (!response.ok) {
+              return response.json().then((error) => {
+                  throw new Error(error.status_message || "Something went wrong");
+              });
+          }
+          return response.json();
+      })
+      .catch((error) => {
+          console.error("Error fetching top-rated movies:", error);
+          throw error;
       });
-    }
-    return response.json();
-  })
-  .catch((error) => {
-     throw error
-  });
 };
 
-export const getTrending = () => {
-  return fetch(
-    `https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&page=1`
-  )
-    .then((response) => {
-      if (!response.ok) {
-        return response.json().then((error) => {
-          throw new Error(error.status_message || "Something went wrong");
-        });
-      }
-      return response.json();
-    })
-    .catch((error) => {
-      throw error;
-    });
+
+export const getTrending = (offset = 0) => {
+  const itemsPerPage = 20;
+  const page = Math.floor(offset / itemsPerPage) + 1; 
+  const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&page=${page}`;
+  return fetch(url)
+      .then((response) => {
+          if (!response.ok) {
+              return response.json().then((error) => {
+                  throw new Error(error.status_message || "Something went wrong");
+              });
+          }
+          return response.json();
+      })
+      .catch((error) => {
+          console.error("Error fetching trending movies:", error);
+          throw error;
+      });
 };
+
+export const getActorCredits = async ({ queryKey }) => {
+  const [_key, { id }] = queryKey; 
+  const response = await fetch(
+    `https://api.themoviedb.org/3/person/${id}?api_key=${process.env.REACT_APP_TMDB_KEY}&append_to_response=combined_credits`
+  );
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+
+  return response.json();
+};
+
+

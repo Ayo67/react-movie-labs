@@ -1,31 +1,29 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { useQuery } from "react-query";
-import { getActorDetails } from "../api/tmdb-api"; 
-import Spinner from "../components/spinner";
-import ActorDetails from "../components/actorDetails";  
-import Typography from "@mui/material/Typography";
-import PageTemplate from "../components/templateActorPage";
+import React from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { getActorCredits } from '../api/tmdb-api'; 
+import ActorDetailsPageTemplate from '../components/templateActorPage'; 
+import Spinner from '../components/spinner';
 
 const ActorDetailsPage = () => {
-    const { id } = useParams();
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { data: actor, isLoading, isError, error } = useQuery(
+    ['actorCredits', { id }],
+    getActorCredits 
+  );
 
-    const { data: actor, error, isLoading, isError } = useQuery(["actor", {id} ], getActorDetails);
-    console.log(actor)
+  if (isLoading) return <Spinner />;
+  if (isError) return <div>Error: {error.message}</div>;
 
-    if (isLoading) {
-        return <Spinner />;
-    }
+  // Back button handler
+  const handleGoBack = () => {
+    navigate(-1); 
+  };
 
-    if (isError) {
-        return <Typography variant="h5">Error: {error.message}</Typography>;
-    }
-
-    return (
-        <PageTemplate actor={actor}>
-            <ActorDetails actor={actor} />
-        </PageTemplate>
-    );
+  return (
+    <ActorDetailsPageTemplate actor={actor} onBack={handleGoBack} />
+  );
 };
 
 export default ActorDetailsPage;

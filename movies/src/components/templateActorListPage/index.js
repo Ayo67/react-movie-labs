@@ -7,7 +7,6 @@ import Grid from "@mui/material/Grid";
 function ActorListPageTemplate({ actors, title, action }) {
   const [nameFilter, setNameFilter] = useState("");
 
-  // Filter actors by name
   let displayedActors = actors.filter((actor) =>
     actor.name.toLowerCase().includes(nameFilter.toLowerCase())
   );
