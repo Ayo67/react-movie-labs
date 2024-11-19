@@ -5,12 +5,13 @@ import { getActorDetails } from "../api/tmdb-api";
 import Spinner from "../components/spinner";
 import ActorDetails from "../components/actorDetails";  
 import Typography from "@mui/material/Typography";
-import PageTemplate from "../components/templateMoviePage";
+import PageTemplate from "../components/templateActorPage";
 
 const ActorDetailsPage = () => {
     const { id } = useParams();
 
-    const { data: actor, error, isLoading, isError } = useQuery(["actor", id], getActorDetails);
+    const { data: actor, error, isLoading, isError } = useQuery(["actor", {id} ], getActorDetails);
+    console.log(actor)
 
     if (isLoading) {
         return <Spinner />;

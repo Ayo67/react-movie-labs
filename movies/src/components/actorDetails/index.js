@@ -1,32 +1,27 @@
 import React from "react";
-import { useParams } from "react-router-dom"; // Import useParams
+import { useParams } from "react-router-dom"; 
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import { useQuery } from "react-query";
-import { getActorDetails } from "../../api/tmdb-api"; // Import the API function
+import { getActorDetails } from "../../api/tmdb-api"; 
 
-const ActorDetails = () => {
-    const { id } = useParams(); // Get actor ID from URL
+const ActorDetails = ({actor}) => {
+    //const { id } = useParams();
 
-    // Fetch actor details
-    const { data: actor, isLoading, isError, error } = useQuery(
-        ["actorDetails", { id }],
-        () => getActorDetails({ queryKey: ["actorDetails", { id }] })
-    );
+    // const { data: actor, isLoading, isError, error } = useQuery(
+    //     ["actorDetails", id],  
+    //       getActorDetails  
+    // );
 
-    if (isLoading) {
-        return <Typography>Loading actor details...</Typography>;
-    }
+    // if (isLoading) return <Typography>Loading actor details...</Typography>;
 
-    if (isError) {
-        return (
-            <Typography variant="h6" color="text.secondary" sx={{ mt: 3, textAlign: 'center' }}>
-                Error loading actor details: {error.message}
-            </Typography>
-        );
-    }
+    // if (isError) return (
+    //     <Typography variant="h6" color="text.secondary" sx={{ mt: 3, textAlign: 'center' }}>
+    //         Error loading actor details: {error.message}
+    //     </Typography>
+    // );
 
     return (
         <Card sx={{ maxWidth: 600, margin: "auto", mt: 3 }}>
