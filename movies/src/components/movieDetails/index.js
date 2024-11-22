@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from 'react';
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -8,11 +8,9 @@ import NavigationIcon from "@mui/icons-material/Navigation";
 import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
 import Drawer from "@mui/material/Drawer";
-import Grid from "@mui/material/Grid";  // Import Grid component
+import Grid from "@mui/material/Grid";
 import MovieReviews from "../movieReviews";
 import ActorCard from "../actorCard";
-import { useQuery } from "react-query";
-import { getMovieCast } from "../../api/tmdb-api";
 
 const root = {
   display: "flex",
@@ -24,14 +22,8 @@ const root = {
 };
 const chip = { margin: 0.5 };
 
-const MovieDetails = ({ movie }) => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
-  // Fetch the cast data for this movie
-  const { data: castData, isLoading, isError } = useQuery(
-    ["movieCast", { id: movie.id }],
-    getMovieCast
-  );
+const MovieDetails = ({ movie, cast, navigateToActorDetails }) => {
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   return (
     <>
@@ -77,18 +69,16 @@ const MovieDetails = ({ movie }) => {
         Cast
       </Typography>
 
-      {isLoading ? (
-        <Typography>Loading Cast...</Typography>
-      ) : isError ? (
-        <Typography>Error fetching cast details.</Typography>
-      ) : (
+      {cast.length > 0 ? (
         <Grid container spacing={2} sx={{ padding: 2 }}>
-          {castData.cast.slice(0, 10).map((actor) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={actor.id}>  {/* Adjust sizes as needed */}
+          {cast.slice(0, 10).map((actor) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={actor.id}>
               <ActorCard actor={actor} />
             </Grid>
           ))}
         </Grid>
+      ) : (
+        <Typography>No cast available.</Typography>
       )}
 
       <Fab

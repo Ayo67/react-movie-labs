@@ -10,7 +10,11 @@ const ActorDetailsPage = () => {
   const navigate = useNavigate();
   const { data: actor, isLoading, isError, error } = useQuery(
     ['actorCredits', { id }],
-    getActorCredits 
+    getActorCredits,{
+      staleTime: 1000 * 60 * 60 * 24, 
+      cacheTime: 1000 * 60 * 60 * 24 * 7,
+      refetchOnWindowFocus: false,
+    }
   );
 
   if (isLoading) return <Spinner />;

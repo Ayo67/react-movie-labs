@@ -1,11 +1,10 @@
-import React from "react";
+import React from 'react';
 import MovieHeader from "../headerMovie";
-import Grid from "@mui/material/Grid2";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
+import Grid from "@mui/material/Grid";
+import { Paper } from '@mui/material';
 import { getMovieImages } from "../../api/tmdb-api";
 import { useQuery } from "react-query";
-import Spinner from '../spinner'
+import Spinner from '../spinner';
 
 const TemplateMoviePage = ({ movie, children }) => {
   const { data, error, isLoading, isError } = useQuery(
@@ -25,35 +24,31 @@ const TemplateMoviePage = ({ movie, children }) => {
     return <h1>{error.message}</h1>;
   }
 
-  const images = data.posters;
+  const images = data?.posters || [];
 
   return (
     <>
       <MovieHeader movie={movie} />
 
-      <Grid container spacing={5} style={{ padding: "15px" }}>
-        <Grid size={{ xs: 3 }}>
-          <div
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "space-around",
-            }}
-          >
-            <ImageList sx={{ height: "100vh" }} cols={1}>
-              {images.map((image) => (
-                <ImageListItem key={image.file_path} cols={1}>
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500/${image.file_path}`}
-                    alt={image.poster_path}
-                  />
-                </ImageListItem>
-              ))}
-            </ImageList>
-          </div>
+      <Grid container spacing={4} style={{ padding: "15px" }}>
+        <Grid item xs={12} sm={4}>
+          <Paper elevation={3} style={{ padding: "10px" }}>
+            <h2>Movie Poster</h2>
+            {images.length > 0 ? (
+              <img
+                src={`https://image.tmdb.org/t/p/w500/${images[0].file_path}`}
+                alt={movie.title}
+                style={{ width: "100%", height: "auto", objectFit: "cover" }}
+              />
+            ) : (
+              <div>No poster available</div>
+            )}
+          </Paper>
         </Grid>
 
-        <Grid size={{ xs: 9 }}>{children}</Grid>
+        <Grid item xs={12} sm={8}>
+          {children}
+        </Grid>
       </Grid>
     </>
   );

@@ -8,21 +8,7 @@ import { useQuery } from "react-query";
 import { getActorDetails } from "../../api/tmdb-api"; 
 
 const ActorDetails = ({actor}) => {
-    //const { id } = useParams();
-
-    // const { data: actor, isLoading, isError, error } = useQuery(
-    //     ["actorDetails", id],  
-    //       getActorDetails  
-    // );
-
-    // if (isLoading) return <Typography>Loading actor details...</Typography>;
-
-    // if (isError) return (
-    //     <Typography variant="h6" color="text.secondary" sx={{ mt: 3, textAlign: 'center' }}>
-    //         Error loading actor details: {error.message}
-    //     </Typography>
-    // );
-
+    
     return (
         <Card sx={{ maxWidth: 600, margin: "auto", mt: 3 }}>
             <CardMedia

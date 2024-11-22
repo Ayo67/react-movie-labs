@@ -15,10 +15,12 @@ import ActorDetailsPage from "./pages/actorDetailsPage";
 import TopRatedMoviesPage from "./pages/topRatedMoviesPage";
 import TrendingMoviesPage from "./pages/trendingMoviesPage"; 
 
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 360000,
+      staleTime: 1000 * 60 * 60 * 24,
+      cacheTime: 1000 * 60 * 60 * 24 * 7,
       refetchInterval: 360000, 
       refetchOnWindowFocus: false
     },
@@ -42,6 +44,8 @@ const App = () => {
             <Route path="/actor/:id" element={<ActorDetailsPage />} />
             <Route path="/movies/topRated" element={<TopRatedMoviesPage />} />
             <Route path="/movies/trending" element={<TrendingMoviesPage />} /> 
+            {/* <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} /> */}
           </Routes>
         </MoviesContextProvider>
       </BrowserRouter>
