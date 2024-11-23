@@ -2,20 +2,22 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
+import { getDatabase } from "firebase/database";
 
-// Your Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDyx1cfVMN9TH8PP1uR1V2TR0wKW_89-sY",
-  authDomain: "movies-app-59866.firebaseapp.com",
-  projectId: "movies-app-59866",
-  storageBucket: "movies-app-59866.firebasestorage.app",
-  messagingSenderId: "149202355759",
-  appId: "1:149202355759:web:e1b005bf8e36eb287468da",
-  measurementId: "G-1PCVV812RJ"
+  apiKey: "AIzaSyAgYkWUrmossyKALneqSYxat0b5YEYXuSQ",
+  authDomain: "movies-app-aab6b.firebaseapp.com",
+  databaseURL: "https://movies-app-aab6b-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "movies-app-aab6b",
+  storageBucket: "movies-app-aab6b.firebasestorage.app",
+  messagingSenderId: "289453893483",
+  appId: "1:289453893483:web:cabdc74aa00e0d9a0f8e2e",
+  measurementId: "G-GMPQ1T9V03"
 };
 
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
+export const db = getDatabase(app);
 export const auth = getAuth(app);
 export const analytics = getAnalytics(app);
 
