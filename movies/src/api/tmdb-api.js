@@ -1,21 +1,25 @@
-export const getMovies = (offset = 0) => {
+export const getMovies = (offset = 0, title = '', genre = '') => {
   const itemsPerPage = 20;
-  const page = Math.floor(offset / itemsPerPage) + 1; 
-  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&include_adult=false&include_video=false&page=${page}`;
+  const page = Math.floor(offset / itemsPerPage) + 1;
+  const titleParam = title ? `&query=${encodeURIComponent(title)}` : '';
+  const genreParam = genre ? `&with_genres=${genre}` : '';
+  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&include_adult=false&include_video=false&page=${page}${titleParam}${genreParam}`;
+
   return fetch(url)
-      .then((response) => {
-          if (!response.ok) {
-              return response.json().then((error) => {
-                  throw new Error(error.status_message || "Something went wrong");
-              });
-          }
-          return response.json();
-      })
-      .catch((error) => {
-          console.error("Error fetching movies:", error);
-          throw error;
-      });
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || 'Something went wrong');
+        });
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error('Error fetching movies:', error);
+      throw error;
+    });
 };
+
 
   
 export const getMovie = (args) => {
