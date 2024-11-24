@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getMovies } from "../api/tmdb-api";
+import { getMovies, searchMovies, getMoviesByGenre } from "../api/tmdb-api"; // Ensure you have an API for fetching movies by genre
 import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
@@ -8,13 +8,21 @@ import { Pagination, Box } from '@mui/material';
 
 const HomePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [offset, setOffset] = useState(0); 
+  const [searchTerm, setSearchTerm] = useState(""); 
+  const [selectedGenre, setSelectedGenre] = useState("0"); 
 
   const itemsPerPage = 20;
 
   const { data, error, isLoading, isError } = useQuery(
-    ['discover', offset],
-    () => getMovies(offset),
+    ['discover', currentPage, searchTerm, selectedGenre], 
+    () => {
+      if (searchTerm) {
+        return searchMovies(searchTerm, currentPage);
+      } else if (selectedGenre !== "0") {
+        return getMoviesByGenre(selectedGenre, currentPage);
+      }
+      return getMovies((currentPage - 1) * itemsPerPage);
+    },
     { keepPreviousData: true }
   );
 
@@ -31,12 +39,17 @@ const HomePage = () => {
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
-    setOffset((value - 1) * itemsPerPage); 
   };
 
-  // Redundant but necessary to avoid app crashing
-  const favorites = movies.filter(m => m.favorite);
-  localStorage.setItem('favorites', JSON.stringify(favorites));
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    setCurrentPage(1);
+  };
+
+  const handleGenreChange = (genre) => {
+    setSelectedGenre(genre);
+    setCurrentPage(1);
+  };
 
   return (
     <>
@@ -44,6 +57,8 @@ const HomePage = () => {
         title="Discover Movies"
         movies={movies}
         action={(movie) => <AddToFavoritesIcon movie={movie} />}
+        onSearch={handleSearch}
+        onGenreChange={handleGenreChange} 
       />
       <Box display="flex" justifyContent="center" marginTop="20px">
         <Pagination

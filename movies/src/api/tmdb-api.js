@@ -18,7 +18,40 @@ export const getMovies = (offset = 0, title = '', genre = '') => {
       throw error;
     });
 };
+export const searchMovies = (query, page = 1) => {
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&query=${encodeURIComponent(query)}&page=${page}&include_adult=false`;
 
+  return fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Error searching movies:", error);
+      throw error;
+    });
+};
+export const getMoviesByGenre = (genreId, page = 1) => {
+  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreId}`;
+
+  return fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Error fetching movies by genre:", error);
+      throw error;
+    });
+};
 
   
 export const getMovie = (args) => {
