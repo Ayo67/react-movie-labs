@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import {TextField,Button,Box,Typography,IconButton,InputAdornment,Link,Snackbar,Alert,} from "@mui/material";
+import {
+  TextField,
+  Button,
+  Box,
+  Typography,
+  IconButton,
+  InputAdornment,
+  Link,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import { Visibility, VisibilityOff, Email } from "@mui/icons-material";
 import { signInWithEmailAndPassword } from "firebase/auth"; 
 import { auth } from "../firebase/config";
@@ -52,6 +62,7 @@ const LoginPage = ({ onLogin }) => {
       setTimeout(() => {
         onLogin(); 
         navigate("/");
+        window.location.reload();
       }, 2000); 
 
     } catch (error) {

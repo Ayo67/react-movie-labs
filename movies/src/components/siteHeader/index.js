@@ -14,13 +14,13 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
-const SiteHeader = ({ history }) => {
+const SiteHeader = ({ onLogout }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  
+
   const navigate = useNavigate();
 
   const menuOptions = [
@@ -39,6 +39,11 @@ const SiteHeader = ({ history }) => {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleLogout = () => {
+    onLogout(); 
+    navigate("/login", { replace: true });
+  };
+
   return (
     <>
       <AppBar position="fixed" color="secondary">
@@ -49,55 +54,59 @@ const SiteHeader = ({ history }) => {
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             All you ever wanted to know about Movies!
           </Typography>
-            {isMobile ? (
-              <>
-                <IconButton
-                  aria-label="menu"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleMenu}
-                  color="inherit"
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={open}
-                  onClose={() => setAnchorEl(null)}
-                >
-                  {menuOptions.map((opt) => (
-                    <MenuItem
-                      key={opt.label}
-                      onClick={() => handleMenuSelect(opt.path)}
-                    >
-                      {opt.label}
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </>
-            ) : (
-              <>
+          {isMobile ? (
+            <>
+              <IconButton
+                aria-label="menu"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={open}
+                onClose={() => setAnchorEl(null)}
+              >
                 {menuOptions.map((opt) => (
-                  <Button
+                  <MenuItem
                     key={opt.label}
-                    color="inherit"
                     onClick={() => handleMenuSelect(opt.path)}
                   >
                     {opt.label}
-                  </Button>
+                  </MenuItem>
                 ))}
-              </>
-            )}
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+            </>
+          ) : (
+            <>
+              {menuOptions.map((opt) => (
+                <Button
+                  key={opt.label}
+                  color="inherit"
+                  onClick={() => handleMenuSelect(opt.path)}
+                >
+                  {opt.label}
+                </Button>
+              ))}
+              <Button color="inherit" onClick={handleLogout}>
+                Logout
+              </Button>
+            </>
+          )}
         </Toolbar>
       </AppBar>
       <Offset />

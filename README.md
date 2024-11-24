@@ -70,14 +70,14 @@ npm start
 
 ## API Endpoints
 
-/movies/favorites - Displays the user's favorite movies.
-/movies/:id - Shows detailed information about a specific movie.
-/movies/upcoming - Displays a list of upcoming movies.
-/movies/topRated - Displays a list of top-rated movies.
-/movies/trending - Displays a list of trending movies.
-/actor/:id - Displays details about a specific actor.
-/reviews/:id - Displays reviews for a particular movie.
-/reviews/form - Allows users to write and submit a new movie review.
+- /movies/favorites - Displays the user's favorite movies.
+- /movies/:id - Shows detailed information about a specific movie.
+- /movies/upcoming - Displays a list of upcoming movies.
+- /movies/topRated - Displays a list of top-rated movies.
+- /movies/trending - Displays a list of trending movies.
+- /actor/:id - Displays details about a specific actor.
+- /reviews/:id - Displays reviews for a particular movie.
+- /reviews/form - Allows users to write and submit a new movie review.
 
 ## Routing  
 
