@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getMovies, searchMovies, getMoviesByGenre } from "../api/tmdb-api"; // Ensure you have an API for fetching movies by genre
+import { getMovies, searchMovies, getMoviesByGenre } from "../api/tmdb-api"; 
 import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
