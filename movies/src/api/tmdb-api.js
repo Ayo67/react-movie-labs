@@ -4,7 +4,6 @@ export const getMovies = (offset = 0, title = '', genre = '') => {
   const titleParam = title ? `&query=${encodeURIComponent(title)}` : '';
   const genreParam = genre ? `&with_genres=${genre}` : '';
   const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&include_adult=false&include_video=false&page=${page}${titleParam}${genreParam}`;
-
   return fetch(url)
     .then((response) => {
       if (!response.ok) {
