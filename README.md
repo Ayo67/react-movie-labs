@@ -39,6 +39,7 @@ The app features functionalities such as displaying favorite movies, viewing mov
 
 ### 6. Firebase Authentication
 - Secure login and user authentication using Firebase.
+- Storing a Users Movies
 
 ### 7. Pagination
 - Navigation for large lists of movies or reviews
